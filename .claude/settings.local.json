@@ -20,7 +20,9 @@
       "Bash(curl -s \"https://api.github.com/repos/atharvasindwani23/voider\")",
       "Bash(curl -s \"https://api.github.com/repos/atharvasindwani23/classly\")",
       "Bash(pkill -f \"vite\")",
-      "Bash(git add *)"
+      "Bash(git add *)",
+      "Bash(curl -L -o /Users/arvani/onlinepresence/public/assets/audio/bgm.mp3 \"https://archive.org/download/Pokemon-Ruby-Sapphire-Pokemon-Center/Pokemon%20Center.mp3\")",
+      "Bash(curl -L -o /Users/arvani/onlinepresence/public/assets/audio/bgm.mp3 \"https://ia800501.us.archive.org/11/items/Pokemon_Red_Pokemon_Blue_Pokemon_Yellow_Soundtrack/Pokemon%20Red%20-%20Pokemon%20Blue%20-%20Pokemon%20Yellow%20Soundtrack%20-%2016%20Pokemon%20Center.mp3\")"
     ]
   }
 }

@@ -26,7 +26,7 @@ const BOOT_MESSAGES = [
   '',
 ];
 
-export default function TerminalScreen({ onMusicToggle, onCatch }) {
+export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, onThrow }) {
   const [lines, setLines] = useState([]);
   const [input, setInput] = useState('');
   const [booted, setBooted] = useState(false);
@@ -68,6 +68,7 @@ export default function TerminalScreen({ onMusicToggle, onCatch }) {
       if (result) {
         if (cmd.toLowerCase() === 'throw') {
           playThrowSound();
+          if (onThrow) onThrow(!!result.caught);
           setTimeout(() => playShakeSound(), 400);
           setTimeout(() => playShakeSound(), 800);
           setTimeout(() => {
@@ -83,14 +84,16 @@ export default function TerminalScreen({ onMusicToggle, onCatch }) {
       return;
     }
 
-    if (cmd.toLowerCase() === '-guess') {
-      const result = startGuessGame();
+    if (cmd.toLowerCase() === '-catch') {
+      const result = startCatchGame();
       setLines(prev => [...prev, ...result]);
+      const pokeName = result.find(l => l.includes('wild'))?.match(/wild (.+?)!/i)?.[1];
+      if (pokeName && onCatchStart) onCatchStart(pokeName);
       return;
     }
 
-    if (cmd.toLowerCase() === '-catch') {
-      const result = startCatchGame();
+    if (cmd.toLowerCase() === '-guess') {
+      const result = startGuessGame();
       setLines(prev => [...prev, ...result]);
       return;
     }

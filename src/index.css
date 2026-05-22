@@ -150,6 +150,11 @@ body {
   image-rendering: crisp-edges;
 }
 
+/* Remove white/light backgrounds from sprite GIFs */
+.sprite-no-bg {
+  mix-blend-mode: multiply;
+}
+
 /* Selection color */
 ::selection {
   background: rgba(74, 222, 128, 0.3);
