@@ -57,17 +57,17 @@ const experience = [
     statBoosts: { backend: 30, ai: 20, data: 25 },
   },
   {
-    company: "OTCR Consulting (Google)",
-    role: "Senior Project Manager",
+    company: "Google",
+    role: "Technical Consulting / AI Automation",
     period: "February 2024 – Present",
     location: "Champaign, IL",
-    description: "Leading risk assessment and tech automation projects for Google within the legal regulatory space.",
+    description: "Worked on risk assessment, technical automation, and AI-powered insights for a Google-facing consulting engagement.",
     bullets: [
-      "Lead PM assisting Google with risk assessments and regulatory tech automation",
+      "Worked on risk assessment and technical automation for Google's policy team",
       "Built AI insights chatbot analyzing 1,000+ interview transcripts with NLP + clustering",
-      "Synthesized qualitative feedback into quantifiable data for client strategy alignment",
+      "Translated qualitative data into structured client recommendations",
     ],
-    tech: ["Power BI", "Tableau", "SQL", "jQuery", "NLP"],
+    tech: ["Power BI", "Tableau", "SQL", "NLP", "Python"],
     statBoosts: { product: 25, leadership: 30, ai: 15 },
   },
   {

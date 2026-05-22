@@ -145,18 +145,38 @@ export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, o
       <div className="scanlines rounded-md" />
 
       {/* Screen content */}
-      <div className="flex-1 overflow-y-auto p-3 font-readable text-[11px] sm:text-xs leading-relaxed relative z-0 screen-flicker">
-        {lines.map((line, i) => (
-          <motion.div
-            key={i}
-            className="terminal-text whitespace-pre-wrap break-words min-h-[1.4em]"
-            initial={{ opacity: 0, y: 3 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.15 }}
-          >
-            {line}
-          </motion.div>
-        ))}
+      <div className="flex-1 overflow-y-auto p-3 sm:p-4 font-readable text-[11px] sm:text-[12px] leading-[1.7] relative z-0 screen-flicker">
+        {lines.map((line, i) => {
+          if (line && typeof line === 'object' && line.clickCommand) {
+            return (
+              <motion.div
+                key={i}
+                className="terminal-text whitespace-pre-wrap break-words min-h-[1.4em] cursor-pointer hover:text-white hover:underline"
+                initial={{ opacity: 0, y: 3 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.15 }}
+                onClick={() => {
+                  playEnterSound();
+                  setLines(prev => [...prev, `> ${line.clickCommand}`]);
+                  processInput(line.clickCommand);
+                }}
+              >
+                {line.text}
+              </motion.div>
+            );
+          }
+          return (
+            <motion.div
+              key={i}
+              className="terminal-text whitespace-pre-wrap break-words min-h-[1.4em]"
+              initial={{ opacity: 0, y: 3 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.15 }}
+            >
+              {typeof line === 'string' ? line : ''}
+            </motion.div>
+          );
+        })}
         <div ref={bottomRef} />
       </div>
 

@@ -1,6 +1,6 @@
 import projects from './projects';
 import experience from './experience';
-import skills, { typeColors } from './skills';
+import skills from './skills';
 
 export function executeCommand(input) {
   const parts = input.trim().split(/\s+/);
@@ -17,35 +17,32 @@ export function executeCommand(input) {
     case '-resume': return resumeOutput();
     case '-contact': return contactOutput();
     case '-clear': return { clear: true };
-    case '-music': return { music: true, lines: ['♪ Music toggled.'] };
+    case '-music': return { music: true, lines: ['', '  ♪ Music toggled.', ''] };
     case '-caught': return { caught: true };
     default:
-      return [`Command not recognized: "${input}"`, '', 'Type -help for available commands.'];
+      return ['', `  Command not found: "${input}"`, '  Type -help for commands.', ''];
   }
 }
 
 function helpOutput() {
   return [
     '',
-    '╔════════════════════════════════════╗',
-    '║      POKÉDEX OS v2.0 — HELP       ║',
-    '╠════════════════════════════════════╣',
-    '║                                    ║',
-    '║  -help        Show this menu       ║',
-    '║  -about       Trainer profile      ║',
-    '║  -skills      Combat stats         ║',
-    '║  -projects    Pokédex entries       ║',
-    '║  -project <n> Entry details        ║',
-    '║  -experience  Battle history       ║',
-    '║  -resume      Full resume          ║',
-    '║  -contact     Signal flare         ║',
-    '║  -guess       Who\'s that Pokémon?  ║',
-    '║  -catch       Throw a Pokéball!    ║',
-    '║  -caught      View collection      ║',
-    '║  -music       Toggle music         ║',
-    '║  -clear       Clear screen         ║',
-    '║                                    ║',
-    '╚════════════════════════════════════╝',
+    '  ┌─────────────────────────────┐',
+    '  │   POKÉDEX OS — COMMANDS     │',
+    '  ├─────────────────────────────┤',
+    '  │                             │',
+    '  │  -about       Quick bio     │',
+    '  │  -experience  Work history  │',
+    '  │  -projects    What I built  │',
+    '  │  -skills      Stat bars     │',
+    '  │  -resume      Full summary  │',
+    '  │  -contact     Reach me      │',
+    '  │  -guess       Pokémon quiz  │',
+    '  │  -catch       Throw ball!   │',
+    '  │  -music       Toggle BGM    │',
+    '  │  -clear       Clear screen  │',
+    '  │                             │',
+    '  └─────────────────────────────┘',
     '',
   ];
 }
@@ -53,30 +50,48 @@ function helpOutput() {
 function aboutOutput() {
   return [
     '',
-    '┌──────── TRAINER PROFILE ────────┐',
+    '  ══ TRAINER PROFILE ══',
     '',
-    '  Name:   Atharva Sindwani',
-    '  Class:  CS + Advertising @ UIUC',
-    '  Level:  Junior (GPA: 4.00/4.00)',
-    '  Region: Urbana-Champaign, IL',
+    '  ┌─ Identity ─────────────────┐',
+    '  │                             │',
+    '  │  Atharva Sindwani           │',
+    '  │  CS + Advertising @ UIUC   │',
+    '  │                             │',
+    '  │  Builder focused on AI,     │',
+    '  │  backend systems, and       │',
+    '  │  product strategy.          │',
+    '  │                             │',
+    '  └─────────────────────────────┘',
     '',
-    '  ═══ BIO ═══',
-    '  Builder obsessed with AI, product,',
-    '  and creative technology. I ship',
-    '  things that people actually use.',
+    '  ┌─ Current Quest ────────────┐',
+    '  │                             │',
+    '  │  Incoming TPM Intern        │',
+    '  │  @ Amazon                   │',
+    '  │                             │',
+    '  └─────────────────────────────┘',
     '',
-    '  ═══ HONORS ═══',
-    '  ★ James Scholar (4x Dean\'s List)',
-    '  ★ Florence J Johnson Scholar',
-    '  ★ $5k Stanford Hackathon Winner',
-    '  ★ 2nd Place UIUC Hackathon',
-    '  ★ "Best Product" Award',
+    '  ┌─ Experience Snapshot ──────┐',
+    '  │                             │',
+    '  │  • Amazon — Incoming TPM    │',
+    '  │  • Mphasis — ML infra,     │',
+    '  │    10k+ rec/min, -35% lat   │',
+    '  │  • NCSA — Distributed AI,   │',
+    '  │    500+ concurrent sessions  │',
+    '  │  • Geopop — NLP + geo       │',
+    '  │    analytics, 50k+ points   │',
+    '  │  • Google — Risk assessment │',
+    '  │    & AI-powered insights    │',
+    '  │                             │',
+    '  └─────────────────────────────┘',
     '',
-    '  ═══ BADGES ═══',
-    '  [Builder] [Hacker] [Founder]',
-    '  [Researcher] [Leader]',
-    '',
-    '└─────────────────────────────────┘',
+    '  ┌─ Core Signal ──────────────┐',
+    '  │                             │',
+    '  │  I build technical products │',
+    '  │  that combine software,     │',
+    '  │  AI systems, and product    │',
+    '  │  thinking.                  │',
+    '  │                             │',
+    '  └─────────────────────────────┘',
     '',
   ];
 }
@@ -84,40 +99,20 @@ function aboutOutput() {
 function skillsOutput() {
   const lines = [
     '',
-    '┌──────── TRAINER STATS ────────┐',
+    '  ══ SKILL STATS ══',
     '',
-    '  ═══ LANGUAGES ═══',
   ];
 
-  skills.filter(s => s.category === 'language').forEach(skill => {
-    const filled = Math.round(skill.level / 5);
-    const empty = 20 - filled;
+  skills.forEach(skill => {
+    const filled = Math.round(skill.level / 10);
+    const empty = 10 - filled;
     const bar = '█'.repeat(filled) + '░'.repeat(empty);
-    lines.push(`  ${skill.name.padEnd(14)} ${bar} ${skill.level}`);
+    lines.push(`  ${skill.name.padEnd(20)} ${bar} ${skill.level}`);
   });
 
   lines.push('');
-  lines.push('  ═══ FRAMEWORKS ═══');
-
-  skills.filter(s => s.category === 'framework').forEach(skill => {
-    const filled = Math.round(skill.level / 5);
-    const empty = 20 - filled;
-    const bar = '█'.repeat(filled) + '░'.repeat(empty);
-    lines.push(`  ${skill.name.padEnd(14)} ${bar} ${skill.level}`);
-  });
-
-  lines.push('');
-  lines.push('  ═══ DOMAINS ═══');
-
-  skills.filter(s => s.category === 'domain').forEach(skill => {
-    const filled = Math.round(skill.level / 5);
-    const empty = 20 - filled;
-    const bar = '█'.repeat(filled) + '░'.repeat(empty);
-    lines.push(`  ${skill.name.padEnd(14)} ${bar} ${skill.level}`);
-  });
-
-  lines.push('');
-  lines.push('└───────────────────────────────┘');
+  lines.push('  ─────────────────────────────────');
+  lines.push('  Strongest: Backend, AI/ML, Product');
   lines.push('');
   return lines;
 }
@@ -125,27 +120,26 @@ function skillsOutput() {
 function projectsOutput() {
   const lines = [
     '',
-    '┌──────── POKÉDEX ENTRIES ────────┐',
+    '  ══ POKÉDEX ENTRIES ══',
     '',
   ];
 
   projects.forEach(p => {
-    lines.push(`  #${p.number} ${p.name}`);
-    lines.push(`  Type: ${p.type.join('/')}`);
-    lines.push(`  "${p.oneLiner}"`);
+    lines.push({ text: `  #${p.number}  ${p.name}`, clickCommand: `-project ${p.id}` });
+    lines.push(`        ${p.oneLiner}`);
     lines.push('');
   });
 
-  lines.push('  Use: -project <name> for details');
-  lines.push('');
-  lines.push('└─────────────────────────────────┘');
+  lines.push('  ─────────────────────────────────');
+  lines.push('  Click a project or type');
+  lines.push('  -project <name> for details.');
   lines.push('');
   return lines;
 }
 
 function projectDetailOutput(name) {
   if (!name) {
-    return ['Usage: -project <name>', 'Example: -project abode', '', 'Available: ' + projects.map(p => p.id).join(', ')];
+    return ['', '  Usage: -project <name>', '  Try: ' + projects.map(p => p.id).join(', '), ''];
   }
 
   const project = projects.find(
@@ -153,47 +147,57 @@ function projectDetailOutput(name) {
   );
 
   if (!project) {
-    return [`Project "${name}" not found.`, '', 'Available: ' + projects.map(p => p.id).join(', ')];
+    return ['', `  Project "${name}" not found.`, '  Available: ' + projects.map(p => p.id).join(', '), ''];
   }
 
   const lines = [
     '',
-    `╔═══════════════════════════════════════╗`,
-    `║  POKÉDEX ENTRY #${project.number}                   ║`,
-    `╠═══════════════════════════════════════╣`,
-    `║`,
-    `  Name: ${project.name}`,
-    `  Type: ${project.type.join(' / ')}`,
-    `  "${project.oneLiner}"`,
-    `║`,
-    `  ═══ DESCRIPTION ═══`,
-    `  ${project.description}`,
-    `║`,
-    `  ═══ PROBLEM SOLVED ═══`,
-    `  ${project.problem}`,
-    `║`,
-    `  ═══ MY CONTRIBUTION ═══`,
-    `  ${project.contribution}`,
-    `║`,
-    `  ═══ TECH STACK ═══`,
-    `  ${project.tech.join(' • ')}`,
-    `║`,
+    `  ══ ENTRY #${project.number} — ${project.name.toUpperCase()} ══`,
+    '',
+    `  ┌─ Overview ──────────────────┐`,
+    `  │`,
+    `  │  Type: ${project.type.join(' / ')}`,
+    `  │  "${project.oneLiner}"`,
+    `  │`,
+    `  └─────────────────────────────┘`,
+    '',
+    `  ┌─ Description ──────────────┐`,
+    `  │`,
   ];
 
-  if (project.github) {
-    lines.push(`  ═══ LINKS ═══`);
-    lines.push(`  GitHub: ${project.github}`);
-    if (project.live) lines.push(`  Live: ${project.live}`);
-    lines.push('║');
+  wrapText(project.description, 35).forEach(l => lines.push(`  │  ${l}`));
+  lines.push(`  │`);
+  lines.push(`  └─────────────────────────────┘`);
+
+  lines.push('');
+  lines.push(`  ┌─ Problem ────────────────────┐`);
+  lines.push(`  │`);
+  wrapText(project.problem, 35).forEach(l => lines.push(`  │  ${l}`));
+  lines.push(`  │`);
+  lines.push(`  └─────────────────────────────┘`);
+
+  lines.push('');
+  lines.push(`  ┌─ My Role ────────────────────┐`);
+  lines.push(`  │`);
+  wrapText(project.contribution, 35).forEach(l => lines.push(`  │  ${l}`));
+  lines.push(`  │`);
+  lines.push(`  └─────────────────────────────┘`);
+
+  if (project.impact) {
+    lines.push('');
+    lines.push(`  ┌─ Impact ────────────────────┐`);
+    lines.push(`  │  ${project.impact}`);
+    lines.push(`  └─────────────────────────────┘`);
   }
 
-  lines.push(`  ═══ STAT BOOSTS ═══`);
-  Object.entries(project.statBoosts).forEach(([stat, val]) => {
-    lines.push(`  ${stat.toUpperCase().padEnd(12)} +${val}`);
-  });
+  lines.push('');
+  lines.push(`  Tech: ${project.tech.join(' • ')}`);
 
-  lines.push(`║`);
-  lines.push(`╚═══════════════════════════════════════╝`);
+  if (project.github) {
+    lines.push('');
+    lines.push(`  GitHub: ${project.github}`);
+  }
+
   lines.push('');
   return lines;
 }
@@ -201,69 +205,67 @@ function projectDetailOutput(name) {
 function experienceOutput() {
   const lines = [
     '',
-    '┌──── TRAINER BATTLE HISTORY ────┐',
+    '  ══ BATTLE HISTORY ══',
     '',
   ];
 
   experience.forEach((exp, i) => {
-    lines.push(`  ◆ ${exp.role}`);
-    lines.push(`    ${exp.company} | ${exp.period}`);
-    lines.push(`    ${exp.location}`);
-    lines.push('');
-    exp.bullets.forEach(b => {
-      lines.push(`    • ${b}`);
+    const num = String(i + 1).padStart(3, '0');
+    lines.push(`  ┌─ [${num}] ${exp.company.toUpperCase()} ─────┐`);
+    lines.push(`  │`);
+    lines.push(`  │  Role: ${exp.role}`);
+    lines.push(`  │  ${exp.period} | ${exp.location}`);
+    lines.push(`  │`);
+    lines.push(`  │  Impact:`);
+    exp.bullets.slice(0, 3).forEach(b => {
+      lines.push(`  │  • ${b}`);
     });
+    lines.push(`  │`);
+    lines.push(`  │  Stack: ${exp.tech.join(', ')}`);
+    lines.push(`  │`);
+    lines.push(`  └─────────────────────────────┘`);
     lines.push('');
-    lines.push(`    Tech: ${exp.tech.join(', ')}`);
-    lines.push('');
-    lines.push(`    Stat Boosts:`);
-    Object.entries(exp.statBoosts).forEach(([stat, val]) => {
-      lines.push(`      ${stat.toUpperCase()} +${val}`);
-    });
-    if (i < experience.length - 1) {
-      lines.push('');
-      lines.push('  ─────────────────────────────');
-      lines.push('');
-    }
   });
 
-  lines.push('');
-  lines.push('└─────────────────────────────────┘');
-  lines.push('');
   return lines;
 }
 
 function resumeOutput() {
   return [
     '',
-    '┌──────── RESUME SUMMARY ────────┐',
+    '  ══ RESUME SUMMARY ══',
     '',
-    '  Atharva Sindwani',
-    '  BS Computer Science & Advertising',
-    '  University of Illinois Urbana-Champaign',
-    '  GPA: 4.00/4.00 | Dean\'s List 4x',
+    '  ┌─ Education ────────────────┐',
+    '  │  BS CS + Advertising       │',
+    '  │  UIUC | James Scholar      │',
+    '  │  Dean\'s List 4x            │',
+    '  └─────────────────────────────┘',
     '',
-    '  ═══ HIGHLIGHTS ═══',
-    '  • Incoming Amazon TPM Intern',
-    '  • AI Intern @ Mphasis (NYC)',
-    '  • ML Intern @ NCSA SPINS',
-    '  • SWE Intern @ Geopop (Mumbai)',
-    '  • Senior PM @ OTCR (Google)',
-    '  • Founded AdTech (75+ members)',
-    '  • Co-founded Abode (17k users)',
-    '  • Won $5k at Stanford Treehacks',
-    '  • 2nd Place UIUC Hackathon',
+    '  ┌─ Experience ───────────────┐',
+    '  │  • Amazon — TPM Intern     │',
+    '  │  • Mphasis — AI Intern     │',
+    '  │  • NCSA — ML Intern        │',
+    '  │  • Geopop — SWE Intern     │',
+    '  │  • Google — Senior PM      │',
+    '  │  • AAF — AdTech President  │',
+    '  └─────────────────────────────┘',
     '',
-    '  ═══ CORE SKILLS ═══',
-    '  C++ • Python • JS • Rust • Go',
-    '  React • TensorFlow • PyTorch',
-    '  AWS • Databricks • Node.js',
+    '  ┌─ Projects ─────────────────┐',
+    '  │  • Abode — 17,000 users    │',
+    '  │  • DevangarAI — Best Prod  │',
+    '  │  • Matrix — 2nd UIUC hack  │',
+    '  │  • Voider — $5k Stanford   │',
+    '  └─────────────────────────────┘',
     '',
-    '  ═══ HONORS ═══',
-    '  James Scholar | Florence J Johnson',
-    '  Scholar | Best Product Award',
+    '  ┌─ Languages ────────────────┐',
+    '  │  C++ • Python • JS • Rust  │',
+    '  │  Go • Swift • Bash         │',
+    '  └─────────────────────────────┘',
     '',
-    '└─────────────────────────────────┘',
+    '  ┌─ Frameworks ───────────────┐',
+    '  │  React • TensorFlow • AWS  │',
+    '  │  PyTorch • Node.js         │',
+    '  └─────────────────────────────┘',
     '',
   ];
 }
@@ -271,18 +273,44 @@ function resumeOutput() {
 function contactOutput() {
   return [
     '',
-    '┌──────── SIGNAL FLARE ────────┐',
+    '  ══ SIGNAL FLARE ══',
     '',
-    '  ✉ Email:    atharva.sindwani@gmail.com',
-    '  ◆ GitHub:   github.com/atharvasindwani23',
-    '  ◆ LinkedIn: linkedin.com/in/atharva-sindwani-686b292a7',
-    '  ◆ Twitter:  x.com/atharwows',
-    '  ☎ Phone:    (217) 480-4938',
-    '  ◍ Location: Urbana, Illinois',
+    '  ┌─────────────────────────────┐',
+    '  │                             │',
+    '  │  ✉ atharva.sindwani         │',
+    '  │    @gmail.com               │',
+    '  │                             │',
+    '  │  ◆ github.com/             │',
+    '  │    atharvasindwani23        │',
+    '  │                             │',
+    '  │  ◆ linkedin.com/in/        │',
+    '  │    atharva-sindwani         │',
+    '  │                             │',
+    '  │  ◆ x.com/atharwows         │',
+    '  │                             │',
+    '  │  ☎ (217) 480-4938          │',
+    '  │  ◍ Urbana, Illinois         │',
+    '  │                             │',
+    '  └─────────────────────────────┘',
     '',
-    '  Ready for battle! Send a signal.',
-    '',
-    '└───────────────────────────────┘',
+    '  Ready for battle. Send a signal.',
     '',
   ];
+}
+
+function wrapText(text, maxWidth) {
+  const words = text.split(' ');
+  const lines = [];
+  let current = '';
+
+  words.forEach(word => {
+    if ((current + ' ' + word).trim().length > maxWidth) {
+      lines.push(current.trim());
+      current = word;
+    } else {
+      current = current ? current + ' ' + word : word;
+    }
+  });
+  if (current) lines.push(current.trim());
+  return lines;
 }
