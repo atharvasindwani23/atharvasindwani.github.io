@@ -293,65 +293,15 @@ function PikachuRunning() {
     <motion.div
       className="absolute"
       style={{ bottom: '8%', left: '10%' }}
-      animate={{ x: [0, 6, 0, -4, 0] }}
+      animate={{ x: [0, 6, 0, -4, 0], y: [0, -2, 0, -1, 0] }}
       transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
     >
-      <svg width="40" height="40" viewBox="0 0 44 44" className="pixel-render">
-        {/* Body */}
-        <ellipse cx="22" cy="26" rx="10" ry="9" fill="#f8d030" />
-        <ellipse cx="22" cy="24" rx="8" ry="7" fill="#ffe040" />
-        {/* Head */}
-        <ellipse cx="22" cy="14" rx="9" ry="8" fill="#f8d030" />
-        <ellipse cx="22" cy="13" rx="7" ry="6" fill="#ffe040" />
-        {/* Ears */}
-        <rect x="12" y="2" width="4" height="10" fill="#f8d030" rx="1" />
-        <rect x="12" y="0" width="4" height="4" fill="#1a1a1a" />
-        <rect x="28" y="2" width="4" height="10" fill="#f8d030" rx="1" />
-        <rect x="28" y="0" width="4" height="4" fill="#1a1a1a" />
-        {/* Cheeks */}
-        <circle cx="15" cy="16" r="3" fill="#e04040" />
-        <circle cx="29" cy="16" r="3" fill="#e04040" />
-        {/* Eyes */}
-        <rect x="18" y="11" width="3" height="4" fill="#1a1a1a" rx="1" />
-        <rect x="24" y="11" width="3" height="4" fill="#1a1a1a" rx="1" />
-        <rect x="19" y="12" width="1" height="1" fill="#ffffff" />
-        <rect x="25" y="12" width="1" height="1" fill="#ffffff" />
-        {/* Back stripes */}
-        <rect x="18" y="22" width="3" height="4" fill="#a07000" />
-        <rect x="23" y="22" width="3" height="4" fill="#a07000" />
-        {/* Tail */}
-        <motion.g
-          animate={{ rotate: [-8, 8, -8] }}
-          transition={{ duration: 0.4, repeat: Infinity }}
-          style={{ transformOrigin: '32px 20px' }}
-        >
-          <rect x="32" y="12" width="4" height="10" fill="#f8d030" />
-          <rect x="34" y="8" width="6" height="8" fill="#f8d030" />
-          <rect x="36" y="6" width="6" height="6" fill="#f8d030" />
-        </motion.g>
-        {/* Running legs */}
-        <motion.g
-          animate={{ rotate: [-15, 15, -15] }}
-          transition={{ duration: 0.2, repeat: Infinity }}
-          style={{ transformOrigin: '18px 34px' }}
-        >
-          <rect x="15" y="33" width="4" height="7" fill="#f8d030" />
-          <rect x="14" y="38" width="5" height="3" fill="#c8a020" />
-        </motion.g>
-        <motion.g
-          animate={{ rotate: [15, -15, 15] }}
-          transition={{ duration: 0.2, repeat: Infinity }}
-          style={{ transformOrigin: '26px 34px' }}
-        >
-          <rect x="24" y="33" width="4" height="7" fill="#f8d030" />
-          <rect x="23" y="38" width="5" height="3" fill="#c8a020" />
-        </motion.g>
-        {/* Speed lines */}
-        <motion.g animate={{ opacity: [0, 0.6, 0] }} transition={{ duration: 0.3, repeat: Infinity }}>
-          <rect x="2" y="22" width="6" height="2" fill="#ffffff" opacity="0.5" />
-          <rect x="4" y="26" width="5" height="2" fill="#ffffff" opacity="0.4" />
-        </motion.g>
-      </svg>
+      <img
+        src="/assets/sprites/pikachu.gif"
+        alt="Pikachu"
+        className="pixel-render sprite-no-bg"
+        style={{ width: '64px', height: '64px', objectFit: 'contain' }}
+      />
     </motion.div>
   );
 }
@@ -361,65 +311,15 @@ function CharmanderRunning() {
     <motion.div
       className="absolute"
       style={{ bottom: '7%', right: '12%' }}
-      animate={{ x: [0, -5, 0, 4, 0] }}
+      animate={{ x: [0, -5, 0, 4, 0], y: [0, -2, 0, -1, 0] }}
       transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
     >
-      <svg width="36" height="40" viewBox="0 0 40 44" className="pixel-render">
-        {/* Body */}
-        <ellipse cx="20" cy="26" rx="9" ry="10" fill="#f08030" />
-        <ellipse cx="20" cy="24" rx="7" ry="8" fill="#f89850" />
-        {/* Head */}
-        <ellipse cx="20" cy="12" rx="8" ry="7" fill="#f08030" />
-        <ellipse cx="20" cy="11" rx="6" ry="5" fill="#f89850" />
-        {/* Eyes */}
-        <rect x="16" y="10" width="3" height="4" fill="#1a1a1a" rx="1" />
-        <rect x="22" y="10" width="3" height="4" fill="#1a1a1a" rx="1" />
-        <rect x="17" y="11" width="1" height="1" fill="#40a0e0" />
-        <rect x="23" y="11" width="1" height="1" fill="#40a0e0" />
-        {/* Belly */}
-        <ellipse cx="20" cy="28" rx="5" ry="6" fill="#ffe8a0" />
-        {/* Arms */}
-        <rect x="10" y="22" width="4" height="6" fill="#f08030" />
-        <rect x="26" y="22" width="4" height="6" fill="#f08030" />
-        {/* Claws */}
-        <rect x="9" y="27" width="2" height="2" fill="#ffffff" />
-        <rect x="11" y="27" width="2" height="2" fill="#ffffff" />
-        <rect x="27" y="27" width="2" height="2" fill="#ffffff" />
-        <rect x="29" y="27" width="2" height="2" fill="#ffffff" />
-        {/* Running legs */}
-        <motion.g
-          animate={{ rotate: [-20, 20, -20] }}
-          transition={{ duration: 0.25, repeat: Infinity }}
-          style={{ transformOrigin: '16px 35px' }}
-        >
-          <rect x="14" y="34" width="4" height="7" fill="#f08030" />
-          <rect x="13" y="39" width="5" height="3" fill="#d06020" />
-        </motion.g>
-        <motion.g
-          animate={{ rotate: [20, -20, 20] }}
-          transition={{ duration: 0.25, repeat: Infinity }}
-          style={{ transformOrigin: '24px 35px' }}
-        >
-          <rect x="22" y="34" width="4" height="7" fill="#f08030" />
-          <rect x="21" y="39" width="5" height="3" fill="#d06020" />
-        </motion.g>
-        {/* Tail with flame */}
-        <rect x="28" y="18" width="4" height="8" fill="#f08030" rx="1" />
-        <rect x="30" y="14" width="4" height="6" fill="#f08030" rx="1" />
-        <motion.g
-          animate={{ scale: [1, 1.2, 0.9, 1.1, 1], y: [0, -2, 1, -1, 0] }}
-          transition={{ duration: 0.5, repeat: Infinity }}
-        >
-          <ellipse cx="33" cy="12" rx="4" ry="5" fill="#f8c030" />
-          <ellipse cx="33" cy="10" rx="3" ry="4" fill="#f86030" />
-          <ellipse cx="33" cy="9" rx="2" ry="3" fill="#ffe060" />
-        </motion.g>
-        {/* Speed lines */}
-        <motion.g animate={{ opacity: [0, 0.5, 0] }} transition={{ duration: 0.35, repeat: Infinity }}>
-          <rect x="32" y="24" width="5" height="2" fill="#ffffff" opacity="0.4" />
-          <rect x="34" y="28" width="4" height="2" fill="#ffffff" opacity="0.3" />
-        </motion.g>
-      </svg>
+      <img
+        src="/assets/sprites/charmander.webp"
+        alt="Charmander"
+        className="pixel-render sprite-no-bg"
+        style={{ width: '64px', height: '64px', objectFit: 'contain' }}
+      />
     </motion.div>
   );
 }
