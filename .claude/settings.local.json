@@ -6,7 +6,21 @@
       "Bash(gh api *)",
       "WebFetch(domain:github.com)",
       "Bash(python3 *)",
-      "Bash(pip3 install *)"
+      "Bash(pip3 install *)",
+      "Bash(git commit *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(npm create *)",
+      "Read(//usr/local/bin/**)",
+      "Read(//Users/arvani/**)",
+      "Bash(curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh)",
+      "Bash(bash)",
+      "Bash(curl -s \"https://api.github.com/users/atharvasindwani23/repos?sort=updated&per_page=30\")",
+      "Bash(curl -s \"https://api.github.com/repos/atharvasindwani23/matrix\")",
+      "Bash(curl -s \"https://api.github.com/repos/atharvasindwani23/voider\")",
+      "Bash(curl -s \"https://api.github.com/repos/atharvasindwani23/classly\")",
+      "Bash(pkill -f \"vite\")",
+      "Bash(git add *)"
     ]
   }
 }
