@@ -9,7 +9,11 @@ import { toggleBgm, startBgmOnInteraction } from '../utils/audio';
 
 export default function PokedexShell({ onCatchStart, onThrow }) {
   const [musicPlaying, setMusicPlaying] = useState(false);
-  const [caughtPokemon, setCaughtPokemon] = useState([]);
+  const [caughtPokemon, setCaughtPokemon] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('caughtPokemon')) || [];
+    } catch { return []; }
+  });
   const bgmStarted = useRef(false);
 
   useEffect(() => {
@@ -34,7 +38,11 @@ export default function PokedexShell({ onCatchStart, onThrow }) {
   };
 
   const handleCatch = (pokemon) => {
-    setCaughtPokemon(prev => [...prev, pokemon]);
+    setCaughtPokemon(prev => {
+      const updated = [...prev, pokemon];
+      localStorage.setItem('caughtPokemon', JSON.stringify(updated));
+      return updated;
+    });
   };
 
   return (
