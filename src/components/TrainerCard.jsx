@@ -31,7 +31,7 @@ export default function TrainerCard() {
       {/* Amazon logo + role — separate section */}
       <div className="text-center">
         <img
-          src={`${import.meta.env.BASE_URL}assets/amazon-logo.webp`}
+          src="/assets/amazon-logo.webp"
           alt="Amazon"
           className="pixel-render mx-auto block rounded-sm"
           style={{ width: '52px', height: '52px', objectFit: 'cover', position: 'relative', left: '32px' }}
