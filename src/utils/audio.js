@@ -91,7 +91,7 @@ let bgmAudio = null;
 
 function getBgmAudio() {
   if (!bgmAudio) {
-    bgmAudio = new Audio('/bgm.mp3');
+    bgmAudio = new Audio(`${import.meta.env.BASE_URL}bgm.mp3`);
     bgmAudio.loop = true;
     bgmAudio.volume = 0.3;
   }

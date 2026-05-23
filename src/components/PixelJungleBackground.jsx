@@ -96,7 +96,7 @@ function PidgeotFlyer() {
       transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
     >
       <img
-        src="/assets/sprites/pidgeot.gif"
+        src={`${import.meta.env.BASE_URL}assets/sprites/pidgeot.gif`}
         alt="Pidgeot"
         className="pixel-render sprite-no-bg"
         style={{ width: '160px', height: '160px', objectFit: 'contain' }}
@@ -117,7 +117,7 @@ function DragoniteFlyer() {
       transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
     >
       <img
-        src="/assets/sprites/dragonite.gif"
+        src={`${import.meta.env.BASE_URL}assets/sprites/dragonite.gif`}
         alt="Dragonite"
         className="pixel-render sprite-no-bg"
         style={{
@@ -297,7 +297,7 @@ function PikachuRunning() {
       transition={{ duration: 1.2, repeat: Infinity, ease: 'easeInOut' }}
     >
       <img
-        src="/assets/sprites/pikachu.gif"
+        src={`${import.meta.env.BASE_URL}assets/sprites/pikachu.gif`}
         alt="Pikachu"
         className="pixel-render sprite-no-bg"
         style={{ width: '64px', height: '64px', objectFit: 'contain' }}
@@ -315,7 +315,7 @@ function CharmanderRunning() {
       transition={{ duration: 1.4, repeat: Infinity, ease: 'easeInOut' }}
     >
       <img
-        src="/assets/sprites/charmander.webp"
+        src={`${import.meta.env.BASE_URL}assets/sprites/charmander.webp`}
         alt="Charmander"
         className="pixel-render sprite-no-bg"
         style={{ width: '64px', height: '64px', objectFit: 'contain' }}
