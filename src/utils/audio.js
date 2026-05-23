@@ -87,80 +87,32 @@ export function playWrongGuess() {
 }
 
 let bgmPlaying = false;
-let bgmInterval = null;
+let bgmAudio = null;
 
-const BGM_MELODY = [
-  // Pokémon-style looping melody (note, duration in beats)
-  [523, 0.5], [587, 0.5], [659, 0.5], [698, 0.5],
-  [784, 1], [698, 0.5], [659, 0.5],
-  [587, 1], [523, 0.5], [587, 0.5],
-  [659, 1.5], [0, 0.5],
-  [784, 0.5], [880, 0.5], [784, 0.5], [698, 0.5],
-  [659, 1], [587, 0.5], [523, 0.5],
-  [587, 1], [659, 0.5], [587, 0.5],
-  [523, 1.5], [0, 0.5],
-  // Second phrase
-  [392, 0.5], [440, 0.5], [523, 0.5], [587, 0.5],
-  [659, 1], [587, 0.5], [523, 0.5],
-  [440, 1], [392, 0.5], [440, 0.5],
-  [523, 1.5], [0, 0.5],
-  [659, 0.5], [698, 0.5], [784, 0.5], [880, 0.5],
-  [784, 1], [698, 0.5], [659, 0.5],
-  [587, 1], [523, 0.5], [587, 0.5],
-  [523, 1.5], [0, 0.5],
-];
+function getBgmAudio() {
+  if (!bgmAudio) {
+    bgmAudio = new Audio('/bgm.mp3');
+    bgmAudio.loop = true;
+    bgmAudio.volume = 0.3;
+  }
+  return bgmAudio;
+}
 
-function playBgmLoop() {
-  const ctx = getCtx();
-  const bpm = 140;
-  const beatDur = 60 / bpm;
-  let time = ctx.currentTime + 0.1;
-
-  BGM_MELODY.forEach(([freq, beats]) => {
-    const dur = beats * beatDur;
-    if (freq > 0) {
-      // Lead voice
-      const osc = ctx.createOscillator();
-      const gain = ctx.createGain();
-      osc.type = 'square';
-      osc.frequency.setValueAtTime(freq, time);
-      gain.gain.setValueAtTime(0.06, time);
-      gain.gain.setValueAtTime(0.06, time + dur * 0.8);
-      gain.gain.exponentialRampToValueAtTime(0.001, time + dur * 0.95);
-      osc.connect(gain);
-      gain.connect(ctx.destination);
-      osc.start(time);
-      osc.stop(time + dur);
-
-      // Harmony (fifth below, quieter)
-      const osc2 = ctx.createOscillator();
-      const gain2 = ctx.createGain();
-      osc2.type = 'triangle';
-      osc2.frequency.setValueAtTime(freq * 0.667, time);
-      gain2.gain.setValueAtTime(0.03, time);
-      gain2.gain.exponentialRampToValueAtTime(0.001, time + dur * 0.9);
-      osc2.connect(gain2);
-      gain2.connect(ctx.destination);
-      osc2.start(time);
-      osc2.stop(time + dur);
-    }
-    time += dur;
-  });
-
-  const totalDur = BGM_MELODY.reduce((sum, [, b]) => sum + b * beatDur, 0);
-  return totalDur;
+export function startBgmOnInteraction() {
+  if (bgmPlaying) return;
+  const audio = getBgmAudio();
+  audio.play().then(() => {
+    bgmPlaying = true;
+  }).catch(() => {});
 }
 
 export function toggleBgm() {
+  const audio = getBgmAudio();
   if (bgmPlaying) {
-    if (bgmInterval) clearInterval(bgmInterval);
-    bgmInterval = null;
+    audio.pause();
     bgmPlaying = false;
   } else {
-    const loopDur = playBgmLoop();
-    bgmInterval = setInterval(() => {
-      if (bgmPlaying) playBgmLoop();
-    }, loopDur * 1000);
+    audio.play().catch(() => {});
     bgmPlaying = true;
   }
   return bgmPlaying;

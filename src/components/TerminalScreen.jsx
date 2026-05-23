@@ -165,6 +165,27 @@ export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, o
               </motion.div>
             );
           }
+          if (line && typeof line === 'object' && line.href) {
+            return (
+              <motion.div
+                key={i}
+                className="terminal-text whitespace-pre-wrap break-words min-h-[1.4em]"
+                initial={{ opacity: 0, y: 3 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.15 }}
+              >
+                <a
+                  href={line.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="underline hover:text-white cursor-pointer"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {line.text}
+                </a>
+              </motion.div>
+            );
+          }
           return (
             <motion.div
               key={i}

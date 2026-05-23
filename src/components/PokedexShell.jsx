@@ -1,15 +1,32 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { motion } from 'framer-motion';
 import TrainerCard from './TrainerCard';
 import TerminalScreen from './TerminalScreen';
 import Controls from './Controls';
 import MusicToggle from './MusicToggle';
 import CaughtCollection from './CaughtCollection';
-import { toggleBgm } from '../utils/audio';
+import { toggleBgm, startBgmOnInteraction } from '../utils/audio';
 
 export default function PokedexShell({ onCatchStart, onThrow }) {
   const [musicPlaying, setMusicPlaying] = useState(false);
   const [caughtPokemon, setCaughtPokemon] = useState([]);
+  const bgmStarted = useRef(false);
+
+  useEffect(() => {
+    const handleInteraction = () => {
+      if (!bgmStarted.current) {
+        bgmStarted.current = true;
+        startBgmOnInteraction();
+        setMusicPlaying(true);
+      }
+    };
+    document.addEventListener('click', handleInteraction, { once: true });
+    document.addEventListener('keydown', handleInteraction, { once: true });
+    return () => {
+      document.removeEventListener('click', handleInteraction);
+      document.removeEventListener('keydown', handleInteraction);
+    };
+  }, []);
 
   const toggleMusic = () => {
     const playing = toggleBgm();
