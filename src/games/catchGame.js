@@ -1,11 +1,25 @@
-import { catchPool, catchRates } from '../data/pokemon';
+import { catchPool } from '../data/pokemon';
 
 let currentCatch = null;
+let sequenceChallenge = null;
+
+const DIFFICULTY = {
+  common:    { length: 4, timeMs: 5000 },
+  uncommon:  { length: 5, timeMs: 4000 },
+  rare:      { length: 6, timeMs: 3000 },
+  legendary: { length: 8, timeMs: 2500 },
+};
+
+function generateSequence(length) {
+  return Array.from({ length }, () => Math.floor(Math.random() * 10)).join('');
+}
 
 export function startCatchGame() {
   const pokemon = catchPool[Math.floor(Math.random() * catchPool.length)];
-  currentCatch = { pokemon, attempts: 0 };
+  currentCatch = { pokemon };
+  sequenceChallenge = null;
 
+  const diff = DIFFICULTY[pokemon.rarity];
   return [
     '',
     '═══════════════════════════════════',
@@ -18,40 +32,81 @@ export function startCatchGame() {
     '  Type "throw" to use a Pokéball.',
     '  Type "run" to flee.',
     '',
+    `  ⚡ Catch challenge: type a ${diff.length}-digit`,
+    `     sequence within ${(diff.timeMs / 1000).toFixed(1)}s!`,
+    '',
   ];
 }
 
 export function handleCatchInput(input) {
   if (!currentCatch) return null;
 
-  const cmd = input.toLowerCase().trim();
+  const cmd = input.trim();
 
-  if (cmd === 'run') {
+  if (cmd.toLowerCase() === 'run' && !sequenceChallenge) {
     const name = currentCatch.pokemon.name;
     currentCatch = null;
-    return ['', `  Got away safely from ${name}!`, ''];
+    sequenceChallenge = null;
+    return { lines: ['', `  Got away safely from ${name}!`, ''], caught: null };
   }
 
-  if (cmd === 'throw') {
-    currentCatch.attempts++;
+  if (cmd.toLowerCase() === 'throw' && !sequenceChallenge) {
     const { pokemon } = currentCatch;
-    const rate = catchRates[pokemon.rarity];
-    const success = Math.random() < rate;
+    const diff = DIFFICULTY[pokemon.rarity];
+    const seq = generateSequence(diff.length);
+    sequenceChallenge = { sequence: seq, startTime: Date.now(), timeMs: diff.timeMs };
 
-    if (success) {
-      const caught = { ...pokemon };
-      currentCatch = null;
+    return {
+      lines: [
+        '',
+        '  ● ● ● Throwing Pokéball... ● ● ●',
+        '',
+        '  ┌───────────────────────────────┐',
+        `  │  QUICK! Type: ${seq}${' '.repeat(Math.max(0, 14 - seq.length))}│`,
+        `  │  Time limit: ${(diff.timeMs / 1000).toFixed(1)}s${' '.repeat(Math.max(0, 14 - 4))}│`,
+        '  └───────────────────────────────┘',
+        '',
+      ],
+      caught: null,
+    };
+  }
+
+  if (sequenceChallenge) {
+    const elapsed = Date.now() - sequenceChallenge.startTime;
+    const { pokemon } = currentCatch;
+
+    if (elapsed > sequenceChallenge.timeMs) {
+      sequenceChallenge = null;
       return {
         lines: [
           '',
-          '  ● ● ● Throwing Pokéball... ● ● ●',
+          '  ⏱ TOO SLOW!',
+          '',
+          `  ✗ ${pokemon.name} broke free!`,
+          '',
+          '  Type "throw" to try again or "run" to flee.',
+          '',
+        ],
+        caught: null,
+      };
+    }
+
+    if (cmd === sequenceChallenge.sequence) {
+      const caught = { ...pokemon };
+      const timeUsed = (elapsed / 1000).toFixed(2);
+      currentCatch = null;
+      sequenceChallenge = null;
+      return {
+        lines: [
+          '',
+          `  ⚡ Sequence entered in ${timeUsed}s!`,
           '',
           '  ...Shake...',
           '  ...Shake...',
           '  ...Shake...',
           '',
           `  ★ Gotcha! ${pokemon.name} was caught! ★`,
-          `  Added to your collection!`,
+          '  Added to your collection!',
           '',
           '  Type -caught to view collection.',
           '',
@@ -59,15 +114,11 @@ export function handleCatchInput(input) {
         caught,
       };
     } else {
+      sequenceChallenge = null;
       return {
         lines: [
           '',
-          '  ● ● ● Throwing Pokéball... ● ● ●',
-          '',
-          '  ...Shake...',
-          '  ...Shake...',
-          '',
-          `  ✗ Oh no! ${pokemon.name} broke free!`,
+          `  ✗ Wrong sequence! ${pokemon.name} broke free!`,
           '',
           '  Type "throw" to try again or "run" to flee.',
           '',
