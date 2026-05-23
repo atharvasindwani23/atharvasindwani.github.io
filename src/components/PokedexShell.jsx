@@ -115,6 +115,7 @@ export default function PokedexShell({ onCatchStart, onThrow }) {
                   onCatch={handleCatch}
                   onCatchStart={onCatchStart}
                   onThrow={onThrow}
+                  caughtPokemon={caughtPokemon}
                 />
               </div>
             </div>

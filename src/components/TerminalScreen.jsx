@@ -26,7 +26,7 @@ const BOOT_MESSAGES = [
   '',
 ];
 
-export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, onThrow }) {
+export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, onThrow, caughtPokemon }) {
   const [lines, setLines] = useState([]);
   const [input, setInput] = useState('');
   const [booted, setBooted] = useState(false);
@@ -112,7 +112,20 @@ export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, o
     }
 
     if (result.caught) {
-      setLines(prev => [...prev, '', '  Your caught Pokémon collection:', '']);
+      if (!caughtPokemon || caughtPokemon.length === 0) {
+        setLines(prev => [...prev, '', '  No Pokémon caught yet! Use -catch to find one.', '']);
+      } else {
+        const collectionLines = [
+          '',
+          '  ══ CAUGHT POKÉMON ══',
+          '',
+          `  Total: ${caughtPokemon.length}`,
+          '',
+          ...caughtPokemon.map((p, i) => `  ${i + 1}. ${p.name} [${p.rarity.toUpperCase()}]`),
+          '',
+        ];
+        setLines(prev => [...prev, ...collectionLines]);
+      }
       return;
     }
 
