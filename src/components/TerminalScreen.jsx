@@ -69,16 +69,13 @@ export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, o
         if (cmd.toLowerCase() === 'throw') {
           playThrowSound();
           if (onThrow) onThrow(!!result.caught);
-          setTimeout(() => playShakeSound(), 400);
-          setTimeout(() => playShakeSound(), 800);
-          setTimeout(() => {
-            if (result.caught) playCatchSuccess();
-            else playCatchFail();
-          }, 1200);
         }
         setLines(prev => [...prev, ...result.lines]);
-        if (result.caught && onCatch) {
-          onCatch(result.caught);
+        if (result.caught) {
+          playCatchSuccess();
+          if (onCatch) onCatch(result.caught);
+        } else if (result.lines.some(l => l.includes('broke free') || l.includes('TOO SLOW'))) {
+          playCatchFail();
         }
       }
       return;

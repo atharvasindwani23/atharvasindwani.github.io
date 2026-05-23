@@ -55,9 +55,17 @@ export function playShakeSound() {
 }
 
 export function playCatchSuccess() {
-  const notes = [523, 659, 784, 1047];
-  notes.forEach((freq, i) => {
-    setTimeout(() => playTone(freq, 0.15, 'square', 0.12), i * 120);
+  const fanfare = [
+    [523, 0.12], [523, 0.12], [523, 0.12], [523, 0.35],
+    [415, 0.12], [466, 0.12], [523, 0.18],
+    [466, 0.08], [523, 0.5],
+    [659, 0.15], [784, 0.15], [880, 0.15], [1047, 0.4],
+  ];
+  let delay = 0;
+  fanfare.forEach(([freq, dur]) => {
+    setTimeout(() => playTone(freq, dur + 0.05, 'square', 0.13), delay * 1000);
+    setTimeout(() => playTone(freq * 0.5, dur + 0.05, 'triangle', 0.06), delay * 1000);
+    delay += dur;
   });
 }
 
