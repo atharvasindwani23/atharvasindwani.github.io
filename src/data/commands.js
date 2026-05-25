@@ -14,6 +14,7 @@ export function executeCommand(input) {
     case '-projects': return projectsOutput();
     case '-project': return projectDetailOutput(args);
     case '-experience': return experienceOutput();
+    case '-exp': return experienceDetailOutput(args);
     case '-resume': return resumeOutput();
     case '-contact': return contactOutput();
     case '-clear': return { clear: true };
@@ -125,14 +126,13 @@ function projectsOutput() {
   ];
 
   projects.forEach(p => {
-    lines.push({ text: `  #${p.number}  ${p.name}`, clickCommand: `-project ${p.id}` });
-    lines.push(`        ${p.oneLiner}`);
+    lines.push({ text: `  ▸ ${p.name}`, clickCommand: `-project ${p.id}` });
+    lines.push(`    ${p.oneLiner}`);
     lines.push('');
   });
 
-  lines.push('  ─────────────────────────────────');
-  lines.push('  Click a project or type');
-  lines.push('  -project <name> for details.');
+  lines.push('  ─────────────────────────────');
+  lines.push('  Click a project for details.');
   lines.push('');
   return lines;
 }
@@ -150,55 +150,71 @@ function projectDetailOutput(name) {
     return ['', `  Project "${name}" not found.`, '  Available: ' + projects.map(p => p.id).join(', '), ''];
   }
 
-  const lines = [
-    '',
-    `  ══ ENTRY #${project.number} — ${project.name.toUpperCase()} ══`,
-    '',
-    `  ┌─ Overview ──────────────────┐`,
-    `  │`,
-    `  │  Type: ${project.type.join(' / ')}`,
-    `  │  "${project.oneLiner}"`,
-    `  │`,
-    `  └─────────────────────────────┘`,
-    '',
-    `  ┌─ Description ──────────────┐`,
-    `  │`,
-  ];
+  const lines = { clear: true, lines: [] };
+  const l = lines.lines;
+  const W = 36;
 
-  wrapText(project.description, 35).forEach(l => lines.push(`  │  ${l}`));
-  lines.push(`  │`);
-  lines.push(`  └─────────────────────────────┘`);
+  l.push('');
+  l.push(`  ╔${'═'.repeat(W)}╗`);
 
-  lines.push('');
-  lines.push(`  ┌─ Problem ────────────────────┐`);
-  lines.push(`  │`);
-  wrapText(project.problem, 35).forEach(l => lines.push(`  │  ${l}`));
-  lines.push(`  │`);
-  lines.push(`  └─────────────────────────────┘`);
+  wrapText(project.name.toUpperCase(), W - 2).forEach(t => {
+    l.push(`  ║  ${t.padEnd(W - 2)}║`);
+  });
+  wrapText(project.type.join(' / '), W - 2).forEach(t => {
+    l.push(`  ║  ${t.padEnd(W - 2)}║`);
+  });
 
-  lines.push('');
-  lines.push(`  ┌─ My Role ────────────────────┐`);
-  lines.push(`  │`);
-  wrapText(project.contribution, 35).forEach(l => lines.push(`  │  ${l}`));
-  lines.push(`  │`);
-  lines.push(`  └─────────────────────────────┘`);
+  l.push(`  ╠${'═'.repeat(W)}╣`);
+  l.push(`  ║${' '.repeat(W)}║`);
+
+  wrapText(project.description, W - 2).forEach(t => {
+    l.push(`  ║  ${t.padEnd(W - 2)}║`);
+  });
+
+  l.push(`  ║${' '.repeat(W)}║`);
+  l.push(`  ╠══ PROBLEM ${'═'.repeat(W - 11)}╣`);
+  l.push(`  ║${' '.repeat(W)}║`);
+
+  wrapText(project.problem, W - 2).forEach(t => {
+    l.push(`  ║  ${t.padEnd(W - 2)}║`);
+  });
+
+  l.push(`  ║${' '.repeat(W)}║`);
+  l.push(`  ╠══ MY ROLE ${'═'.repeat(W - 11)}╣`);
+  l.push(`  ║${' '.repeat(W)}║`);
+
+  wrapText(project.contribution, W - 2).forEach(t => {
+    l.push(`  ║  ${t.padEnd(W - 2)}║`);
+  });
+
+  l.push(`  ║${' '.repeat(W)}║`);
 
   if (project.impact) {
-    lines.push('');
-    lines.push(`  ┌─ Impact ────────────────────┐`);
-    lines.push(`  │  ${project.impact}`);
-    lines.push(`  └─────────────────────────────┘`);
+    l.push(`  ╠══ IMPACT ${'═'.repeat(W - 10)}╣`);
+    l.push(`  ║${' '.repeat(W)}║`);
+    wrapText(project.impact, W - 2).forEach(t => {
+      l.push(`  ║  ${t.padEnd(W - 2)}║`);
+    });
+    l.push(`  ║${' '.repeat(W)}║`);
   }
 
-  lines.push('');
-  lines.push(`  Tech: ${project.tech.join(' • ')}`);
+  l.push(`  ╠══ TECH ${'═'.repeat(W - 8)}╣`);
+  l.push(`  ║${' '.repeat(W)}║`);
+  wrapText(project.tech.join(' • '), W - 2).forEach(t => {
+    l.push(`  ║  ${t.padEnd(W - 2)}║`);
+  });
+  l.push(`  ║${' '.repeat(W)}║`);
 
   if (project.github) {
-    lines.push('');
-    lines.push(`  GitHub: ${project.github}`);
+    l.push(`  ╠${'═'.repeat(W)}╣`);
+    l.push({ text: `  ║  ◆ GitHub`, href: project.github });
   }
 
-  lines.push('');
+  l.push(`  ╚${'═'.repeat(W)}╝`);
+  l.push('');
+  l.push({ text: '  ◂ Back to projects', clickCommand: '-projects' });
+  l.push('');
+
   return lines;
 }
 
@@ -210,22 +226,69 @@ function experienceOutput() {
   ];
 
   experience.forEach((exp, i) => {
-    const num = String(i + 1).padStart(3, '0');
-    lines.push(`  ┌─ [${num}] ${exp.company.toUpperCase()} ─────┐`);
-    lines.push(`  │`);
-    lines.push(`  │  Role: ${exp.role}`);
-    lines.push(`  │  ${exp.period} | ${exp.location}`);
-    lines.push(`  │`);
-    lines.push(`  │  Impact:`);
-    exp.bullets.slice(0, 3).forEach(b => {
-      lines.push(`  │  • ${b}`);
-    });
-    lines.push(`  │`);
-    lines.push(`  │  Stack: ${exp.tech.join(', ')}`);
-    lines.push(`  │`);
-    lines.push(`  └─────────────────────────────┘`);
+    lines.push({ text: `  ▸ ${exp.company}`, clickCommand: `-exp ${i}` });
+    lines.push(`    ${exp.role}`);
     lines.push('');
   });
+
+  lines.push('  ─────────────────────────────');
+  lines.push('  Click a role for details.');
+  lines.push('');
+  return lines;
+}
+
+function experienceDetailOutput(indexStr) {
+  const idx = parseInt(indexStr, 10);
+  if (isNaN(idx) || idx < 0 || idx >= experience.length) {
+    return ['', '  Experience not found.', ''];
+  }
+
+  const exp = experience[idx];
+  const lines = { clear: true, lines: [] };
+  const l = lines.lines;
+  const W = 36;
+
+  l.push('');
+  l.push(`  ╔${'═'.repeat(W)}╗`);
+
+  wrapText(exp.company.toUpperCase(), W - 2).forEach(t => {
+    l.push(`  ║  ${t.padEnd(W - 2)}║`);
+  });
+  wrapText(exp.role, W - 2).forEach(t => {
+    l.push(`  ║  ${t.padEnd(W - 2)}║`);
+  });
+  wrapText(`${exp.period} | ${exp.location}`, W - 2).forEach(t => {
+    l.push(`  ║  ${t.padEnd(W - 2)}║`);
+  });
+
+  l.push(`  ╠${'═'.repeat(W)}╣`);
+  l.push(`  ║${' '.repeat(W)}║`);
+
+  wrapText(exp.description, W - 2).forEach(t => {
+    l.push(`  ║  ${t.padEnd(W - 2)}║`);
+  });
+
+  l.push(`  ║${' '.repeat(W)}║`);
+  l.push(`  ╠══ KEY IMPACT ${'═'.repeat(W - 14)}╣`);
+  l.push(`  ║${' '.repeat(W)}║`);
+
+  exp.bullets.forEach(b => {
+    wrapText(`• ${b}`, W - 2).forEach(t => {
+      l.push(`  ║  ${t.padEnd(W - 2)}║`);
+    });
+  });
+
+  l.push(`  ║${' '.repeat(W)}║`);
+  l.push(`  ╠══ TECH STACK ${'═'.repeat(W - 14)}╣`);
+  l.push(`  ║${' '.repeat(W)}║`);
+  wrapText(exp.tech.join(' • '), W - 2).forEach(t => {
+    l.push(`  ║  ${t.padEnd(W - 2)}║`);
+  });
+  l.push(`  ║${' '.repeat(W)}║`);
+  l.push(`  ╚${'═'.repeat(W)}╝`);
+  l.push('');
+  l.push({ text: '  ◂ Back to experience', clickCommand: '-experience' });
+  l.push('');
 
   return lines;
 }

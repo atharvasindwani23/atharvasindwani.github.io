@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import TrainerCard from './TrainerCard';
 import TerminalScreen from './TerminalScreen';
@@ -44,6 +44,11 @@ export default function PokedexShell({ onCatchStart, onThrow }) {
       return updated;
     });
   };
+
+  const terminalCommandRef = useRef(null);
+  const handleExternalCommand = useCallback((cmd) => {
+    if (terminalCommandRef.current) terminalCommandRef.current(cmd);
+  }, []);
 
   return (
     <div className="relative flex items-center justify-center min-h-screen p-4" style={{ zIndex: 1 }}>
@@ -101,7 +106,7 @@ export default function PokedexShell({ onCatchStart, onThrow }) {
             }}
           >
             <MusicToggle playing={musicPlaying} onToggle={toggleMusic} />
-            <CaughtCollection caught={caughtPokemon} />
+            <CaughtCollection caught={caughtPokemon} onShowCaught={() => handleExternalCommand('-caught')} />
 
             {/* Screen label */}
             <div className="flex items-center gap-2 mb-2">
@@ -124,12 +129,13 @@ export default function PokedexShell({ onCatchStart, onThrow }) {
                   onCatchStart={onCatchStart}
                   onThrow={onThrow}
                   caughtPokemon={caughtPokemon}
+                  commandRef={terminalCommandRef}
                 />
               </div>
             </div>
 
             {/* Controls */}
-            <Controls />
+            <Controls onCommand={handleExternalCommand} />
           </div>
 
           {/* Bottom details */}

@@ -41,14 +41,12 @@ export default function Controls({ onCommand }) {
         ))}
       </div>
 
-      {/* Action buttons */}
-      <div className="flex items-center gap-3">
-        <div className="pokeball-btn" title="Pokéball" />
-        <div className="flex flex-col gap-1.5">
-          <div className="w-5 h-5 rounded-full bg-blue-700 border-2 border-gray-900" style={{ boxShadow: 'inset 1px 1px 0 rgba(255,255,255,0.3)' }} />
-          <div className="w-5 h-5 rounded-full bg-red-700 border-2 border-gray-900" style={{ boxShadow: 'inset 1px 1px 0 rgba(255,255,255,0.3)' }} />
-        </div>
-      </div>
+      {/* Pokéball button — shows caught collection */}
+      <div
+        className="pokeball-btn"
+        title="View caught Pokémon"
+        onClick={() => { playButtonClick(); onCommand && onCommand('-caught'); }}
+      />
     </motion.div>
   );
 }

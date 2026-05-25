@@ -26,7 +26,7 @@ const BOOT_MESSAGES = [
   '',
 ];
 
-export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, onThrow, caughtPokemon }) {
+export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, onThrow, caughtPokemon, commandRef }) {
   const [lines, setLines] = useState([]);
   const [input, setInput] = useState('');
   const [booted, setBooted] = useState(false);
@@ -97,6 +97,11 @@ export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, o
 
     const result = executeCommand(cmd);
 
+    if (result && result.clear && result.lines) {
+      setLines(result.lines);
+      return;
+    }
+
     if (result.clear) {
       setLines([]);
       return;
@@ -129,6 +134,15 @@ export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, o
     setLines(prev => [...prev, ...result]);
   };
 
+  useEffect(() => {
+    if (commandRef) {
+      commandRef.current = (cmd) => {
+        setLines(prev => [...prev, `> ${cmd}`]);
+        processInput(cmd);
+      };
+    }
+  });
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (!input.trim()) return;
@@ -158,20 +172,27 @@ export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, o
       <div className="flex-1 overflow-y-auto p-3 sm:p-4 font-readable text-[11px] sm:text-[12px] leading-[1.7] relative z-0 screen-flicker">
         {lines.map((line, i) => {
           if (line && typeof line === 'object' && line.clickCommand) {
+            const leadingSpaces = line.text.match(/^(\s*)/)[1];
+            const textContent = line.text.trimStart();
             return (
               <motion.div
                 key={i}
-                className="terminal-text whitespace-pre-wrap break-words min-h-[1.4em] cursor-pointer hover:text-white hover:underline"
+                className="terminal-text whitespace-pre-wrap break-words min-h-[1.4em]"
                 initial={{ opacity: 0, y: 3 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.15 }}
-                onClick={() => {
-                  playEnterSound();
-                  setLines(prev => [...prev, `> ${line.clickCommand}`]);
-                  processInput(line.clickCommand);
-                }}
               >
-                {line.text}
+                {leadingSpaces}
+                <span
+                  className="cursor-pointer hover:text-white hover:underline"
+                  onClick={() => {
+                    playEnterSound();
+                    setLines(prev => [...prev, `> ${line.clickCommand}`]);
+                    processInput(line.clickCommand);
+                  }}
+                >
+                  {textContent}
+                </span>
               </motion.div>
             );
           }
@@ -188,7 +209,7 @@ export default function TerminalScreen({ onMusicToggle, onCatch, onCatchStart, o
                   href={line.href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="underline hover:text-white cursor-pointer"
+                  className="no-underline hover:text-white cursor-pointer"
                   onClick={(e) => e.stopPropagation()}
                 >
                   {line.text}

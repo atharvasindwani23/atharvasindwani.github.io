@@ -1,15 +1,17 @@
 import { motion } from 'framer-motion';
 
-export default function CaughtCollection({ caught }) {
+export default function CaughtCollection({ caught, onShowCaught }) {
   if (!caught || caught.length === 0) return null;
 
   return (
     <motion.div
-      className="absolute bottom-2 right-2 z-20"
+      className="absolute bottom-2 right-2 z-20 cursor-pointer"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
+      onClick={(e) => { e.stopPropagation(); if (onShowCaught) onShowCaught(); }}
+      title="View caught Pokémon"
     >
-      <div className="flex items-center gap-1 px-2 py-1 rounded-sm" style={{ background: 'rgba(0,0,0,0.7)', border: '1px solid #2d5a2d' }}>
+      <div className="flex items-center gap-1 px-2 py-1 rounded-sm hover:border-green-400 transition-colors" style={{ background: 'rgba(0,0,0,0.7)', border: '1px solid #2d5a2d' }}>
         <span className="font-pixel text-[7px] text-green-500">CAUGHT:</span>
         <span className="font-pixel text-[8px] text-green-400">{caught.length}</span>
         <div className="flex gap-0.5 ml-1">
